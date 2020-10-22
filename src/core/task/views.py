@@ -35,4 +35,4 @@ class TaskViews(viewsets.ModelViewSet):
             task.save()
             return Response({'detail': "OK"}, status=status.HTTP_200_OK)
         except ValueError:
-            return Response({'detail': 'id is not set'})
+            return Response({"detail": "input doesn't set"}, status=status.HTTP_400_BAD_REQUEST)
