@@ -1,6 +1,7 @@
 from celery import Celery
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Task
@@ -13,6 +14,7 @@ app = Celery('core')
 class TaskViews(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TasksSerializer
+    permission_classes = (IsAuthenticated,)
 
     def perform_create(self, serializer):
         created_by = self.request.user
@@ -46,3 +48,8 @@ class TaskViews(viewsets.ModelViewSet):
             return Response({'detail': "OK"}, status=status.HTTP_200_OK)
         except ValueError:
             return Response({"detail": "input doesn't set"}, status=status.HTTP_400_BAD_REQUEST)
+
+# class NotificationForUserViewSet(viewsets.ModelViewSet):
+#     queryset = NotificationForUser.objects.all()
+#     serializer_class = NotificationForUserSerializer
+#     permission_classes = (IsAuthenticated,)

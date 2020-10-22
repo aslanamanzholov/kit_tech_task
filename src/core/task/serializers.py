@@ -32,3 +32,9 @@ class ChangeTaskStatusSerializer(serializers.ModelSerializer):
         model = Task
         fields = ('before_task_status', 'status', 'edited_by', 'task')
         read_only_fields = ('edited_by',)
+
+
+# class NotificationForUserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = NotificationForUser
+#         fields = '__all__'

@@ -35,3 +35,19 @@ class Task(models.Model):
 
     def __str__(self):
         return '{}'.format(self.name)
+
+
+# class NotificationForUser(models.Model):
+#     task = models.ForeignKey(Task, on_delete=models.CASCADE, blank=True, null=True, verbose_name='Задача')
+#     text_of_notification = models.CharField(max_length=255, blank=True, null=True, verbose_name='Текст уведомлении')
+#     notification_for_users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+#                                                     verbose_name='Пользователи для уведомления')
+#
+#     class Meta:
+#         verbose_name = 'Уведомление'
+#         verbose_name_plural = 'Уведомлении'
+#         ordering = ['-task']
+#         db_table = "notification_db"
+#
+#     def __str__(self):
+#         return '{}'.format(self.text_of_notification)
