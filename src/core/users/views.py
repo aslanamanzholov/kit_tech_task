@@ -5,11 +5,7 @@ from .models import User
 from .serializers import UserSerializer
 
 
-class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.DestroyModelMixin,
-                  mixins.UpdateModelMixin,
-                  mixins.ListModelMixin,
-                  viewsets.GenericViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     Updates and retrieves user accounts
     """
