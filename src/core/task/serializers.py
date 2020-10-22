@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from .models import Task
 from ..helpers.constants import TASK_STATUS
 from ..users.serializers import UserSerializer
+
+User = get_user_model()
 
 
 class TasksSerializer(serializers.ModelSerializer):
@@ -33,6 +36,15 @@ class ChangeTaskStatusSerializer(serializers.ModelSerializer):
         fields = ('before_task_status', 'status', 'edited_by', 'task')
         read_only_fields = ('edited_by',)
 
+
+class NotificationForUserSerializer(serializers.ModelSerializer):
+    task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all())
+    text_of_notification = serializers.CharField(max_length=250, allow_blank=True)
+    users = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=True)
+
+    class Meta:
+        model = Task
+        fields = ('task', 'text_of_notification', 'users',)
 
 # class NotificationForUserSerializer(serializers.ModelSerializer):
 #     class Meta:

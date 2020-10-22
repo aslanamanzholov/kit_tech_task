@@ -17,6 +17,17 @@ def send_email(id, first_name, last_name, email, status, before_task_status, **k
 
 
 @shared_task
+def send_email_for_user(id, first_name, last_name, email, text_of_notification, task, **kwargs):
+    send_mail(
+        subject='Изменение статуса задачи',
+        message=f'{first_name} {last_name}, Идентификатор Задачи: {task}, Текст уведомлении: {text_of_notification}',
+        from_email='site@no-reply.kz',
+        recipient_list=[email],
+        fail_silently=False,
+    )
+
+
+@shared_task
 def send_email_to_executor(**kwargs):
     task = Task.objects.all()
     for i in task:
