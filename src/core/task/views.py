@@ -1,9 +1,13 @@
+from celery import Celery
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import Task
 from .serializers import TasksSerializer, ChangeTaskStatusSerializer
+from ..schedules import send_email
+
+app = Celery('core')
 
 
 class TaskViews(viewsets.ModelViewSet):
@@ -33,6 +37,12 @@ class TaskViews(viewsets.ModelViewSet):
             task.before_task_status = request.data['before_task_status']
             task.edited_by = self.request.user
             task.save()
+            if task.observers is not None:
+                for i in task.observers.all():
+                    celery_task = app.task(send_email).apply(args=[i.id, i.first_name,
+                                                                   i.last_name, i.email, request.data['status'],
+                                                                   request.data['before_task_status']])
+                    print(f"id={celery_task.id}, state={celery_task.state}, status={celery_task.status}")
             return Response({'detail': "OK"}, status=status.HTTP_200_OK)
         except ValueError:
             return Response({"detail": "input doesn't set"}, status=status.HTTP_400_BAD_REQUEST)
