@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Task
+from ..helpers.constants import TASK_STATUS
 from ..users.serializers import UserSerializer
 
 
@@ -21,3 +22,13 @@ class TasksSerializer(serializers.ModelSerializer):
         if instance.observers is not None:
             representation['observers'] = UserSerializer(instance.observers, many=True).data
         return representation
+
+
+class ChangeTaskStatusSerializer(serializers.ModelSerializer):
+    task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all())
+    before_task_status = serializers.ChoiceField(choices=TASK_STATUS)
+
+    class Meta:
+        model = Task
+        fields = ('before_task_status', 'status', 'edited_by', 'task')
+        read_only_fields = ('edited_by',)

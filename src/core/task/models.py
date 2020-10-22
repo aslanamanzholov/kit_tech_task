@@ -19,12 +19,19 @@ class Task(models.Model):
                                    verbose_name='Пользователь', related_name='created_by')
     edited_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True,
                                   verbose_name='Редактируемый пользователь', related_name='edited_by')
+    before_task_status = models.CharField(max_length=255, choices=TASK_STATUS, blank=False, null=True,
+                                          verbose_name='Статус')
 
     class Meta:
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'
         ordering = ['-start_time']
         db_table = "task_db"
+
+    # def __init__(self, *args, **kwargs):
+    #     super(Task, self).__init__(*args, **kwargs)
+    #     self.before_task_status = self.status
+    #     self.save()
 
     def __str__(self):
         return '{}'.format(self.name)
